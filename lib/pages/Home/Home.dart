@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_shop/api/home.dart';
 import 'package:gb_shop/components/Home/GbCatefory.dart';
 import 'package:gb_shop/components/Home/GbHot.dart';
 import 'package:gb_shop/components/Home/GbMoreList.dart';
@@ -15,19 +16,19 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   //定义一个列表来存储轮播图的数据
-  final List<BannerItem> _bannerList = [
-    BannerItem(
-      id: "1", 
-    imageUrl: "lib/assets/aly1.png"
-    ),
-     BannerItem(
-      id: "2", 
-    imageUrl: "lib/assets/4.png"
-    ),
-     BannerItem(
-      id: "3", 
-      imageUrl: "lib/assets/aly2.png"
-    ),
+    List<BannerItem> _bannerList = [
+    // BannerItem(
+    //   id: "1", 
+    // imageUrl: "lib/assets/aly1.png"
+    // ),
+    //  BannerItem(
+    //   id: "2", 
+    // imageUrl: "lib/assets/4.png"
+    // ),
+    //  BannerItem(
+    //   id: "3", 
+    //   imageUrl: "lib/assets/aly2.png"
+    // ),
     
   ];
   List<Widget> _getScrollChliderr (){
@@ -60,6 +61,15 @@ class _HomeViewState extends State<HomeView> {
       SliverToBoxAdapter(child: SizedBox(height: 10)),
       Gbmorelist(),
       ];
+  }
+  @override
+  void initState() { 
+    super.initState();
+    _getBannderList(); 
+  }
+  _getBannderList() async{
+    _bannerList = await getBannerList();
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {

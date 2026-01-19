@@ -22,8 +22,9 @@ class _GbsliderState extends State<Gbslider> {
       carouselController: _controller,
       items: List.generate(widget.bannerList.length, (int index){
       // 如果是网络图片 需要使用Image.Network
-      return Image.asset(
+      return Image.network(
       widget.bannerList[index].imageUrl!,
+      //控制图片或视频在容器中如何填充和裁剪的属性。
       fit: BoxFit.cover,
       width: screenWidth,
       );
@@ -37,7 +38,7 @@ class _GbsliderState extends State<Gbslider> {
       } ,
       height: 400,
       //设置轮播图的宽度为屏幕比例
-      viewportFraction: 1.0,
+      viewportFraction: 1,
       //自动播放
       autoPlay: true,
       //设置自动播放的间隔
