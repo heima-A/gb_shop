@@ -15,6 +15,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  //定义一个列表来存储分类的数据
+  List<CategoryItem> _categoryList = [];
   //定义一个列表来存储轮播图的数据
     List<BannerItem> _bannerList = [
     // BannerItem(
@@ -38,7 +40,7 @@ class _HomeViewState extends State<HomeView> {
         //放置间隔组件
         SliverToBoxAdapter(child: SizedBox(height: 10)),
         //防止分类组件
-        SliverToBoxAdapter(child:Gbcatefory()),
+        SliverToBoxAdapter(child:Gbcatefory(categoryList: _categoryList)),
         
          //放置间隔组件
         SliverToBoxAdapter(child: SizedBox(height: 10)),
@@ -66,6 +68,12 @@ class _HomeViewState extends State<HomeView> {
   void initState() { 
     super.initState();
     _getBannderList(); 
+    _getCategoryList();
+  }
+  //获取分类列表
+  _getCategoryList() async{
+    _categoryList = await getCategoryList();
+    setState(() {});
   }
   _getBannderList() async{
     _bannerList = await getBannerList();

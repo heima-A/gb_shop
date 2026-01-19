@@ -8,3 +8,9 @@ Future<List<BannerItem>> getBannerList()async{
   return BannerItem.fromJson(item as Map<String,dynamic>);
  }).toList();
 }
+//获取分类列表
+Future<List<CategoryItem>> getCategoryList()async{
+  return ((await dioRequest.get(HttpConstants.CATEGORY_LIST)) as List).map((item){
+  return CategoryItem.fromJson(item as Map<String,dynamic>);
+ }).toList();
+}
