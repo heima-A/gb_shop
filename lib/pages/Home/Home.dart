@@ -15,6 +15,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+    //定义一个列表来存储特惠推荐的数据
+  SpecialOfferResult _specialRecommendResult = SpecialOfferResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
   //定义一个列表来存储分类的数据
   List<CategoryItem> _categoryList = [];
   //定义一个列表来存储轮播图的数据
@@ -45,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
          //放置间隔组件
         SliverToBoxAdapter(child: SizedBox(height: 10)),
         //放置推荐组件
-        SliverToBoxAdapter(child: Gbsuggestion()),
+        SliverToBoxAdapter(child: Gbsuggestion(specialOfferResult: _specialRecommendResult)),
         //放置间隔组件
         SliverToBoxAdapter(child: SizedBox(height: 10)),
         //放置爆款组件
@@ -64,27 +70,33 @@ class _HomeViewState extends State<HomeView> {
       Gbmorelist(),
       ];
   }
+
   @override
   void initState() { 
     super.initState();
     _getBannderList(); 
     _getCategoryList();
+    _getProductList();
+  }
+  //获取特惠推荐列表
+  void _getProductList() async{
+  _specialRecommendResult = await getProducListAPI();
+    setState(() {});
   }
   //获取分类列表
-  _getCategoryList() async{
+  void _getCategoryList() async{
     _categoryList = await getCategoryList();
     setState(() {});
   }
-  _getBannderList() async{
+  //获取轮播图列表
+  void _getBannderList() async{
     _bannerList = await getBannerList();
     setState(() {});
   }
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CustomScrollView(
+    return CustomScrollView(
         slivers: _getScrollChliderr(),
-      ),
-    );
+      );
   }
 }
