@@ -1,21 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:gb_shop/viewmodels/home.dart';
 
 class Gbhot extends StatefulWidget {
-  Gbhot({Key? key}) : super(key: key);
+  final SpecialOfferResult result;
+  final String type;
+  Gbhot({Key? key,required this.result,required this.type}) : super(key: key);
 
   @override
   _GbhotState createState() => _GbhotState();
 }
 
 class _GbhotState extends State<Gbhot> {
+    // 获取前两条数据
+  List<SpecialOfferGoodsItem> get _items {
+    if (widget.result.subTypes!.isEmpty) {
+      return [];
+    }
+    return widget.result.subTypes!.first.goodsItems!.items!.take(2).toList();
+  }
+  // 构建子项
+  List<Widget> _getChildrenList() {
+    return _items.map((item) {
+      return Container(
+        width: 80,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                item.picture ?? "",
+                width: 80,
+                height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    "lib/assets/home_cmd_inner.png",
+                    width: 80,
+                    height: 100,
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              "¥${item.price}",
+              style: TextStyle(
+                fontSize: 12,
+                color: const Color.fromARGB(255, 86, 24, 20),
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        Text(
+          widget.type == "step" ? "一站买全" : "爆款推荐",
+          style: TextStyle(
+            color: const Color.fromARGB(255, 86, 24, 20),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SizedBox(width: 10),
+        Text(
+          widget.type == "step" ? "精心优选" : "最受欢迎",
+          style: TextStyle(
+            fontSize: 12,
+            color: const Color.fromARGB(255, 124, 63, 58),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      height: 200,
-      alignment: Alignment.center,
-      color: Colors.blue,
-       child: Text('爆款推荐',style: TextStyle(fontSize: 20,color: Colors.white),),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: widget.type == "step"
+              ? const Color.fromARGB(255, 249, 247, 219)
+              : const Color.fromARGB(255, 211, 228, 240),
+        ),
+        child: Column(
+          children: [
+            // 顶部内容
+            _buildHeader(),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _getChildrenList(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

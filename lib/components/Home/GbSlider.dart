@@ -17,6 +17,13 @@ class _GbsliderState extends State<Gbslider> {
     //在Flutter中获取屏幕宽度
     final double screenWidth = MediaQuery.of(context).size.width;
     //返回轮播图插件
+    if (widget.bannerList.isEmpty){
+      return SizedBox(
+        height: 400,
+        width: screenWidth,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
     return CarouselSlider(
       //切换事件 需要先定义一个carouseController对象然后绑定给他完成绑定事件
       carouselController: _controller,
@@ -27,6 +34,17 @@ class _GbsliderState extends State<Gbslider> {
       //控制图片或视频在容器中如何填充和裁剪的属性。
       fit: BoxFit.cover,
       width: screenWidth,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(child: CircularProgressIndicator());
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: Colors.black12,
+          alignment: Alignment.center,
+          child: Icon(Icons.broken_image, size: 48, color: Colors.grey),
+        );
+      },
       );
     }), options: CarouselOptions(
       //切换事件
