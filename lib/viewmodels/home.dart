@@ -121,6 +121,31 @@ class SpecialOfferGoodsItem{
     );
   }
 }
+class SpecialOfferGoodsDtetaisItems{
+  int? counts;
+  int? pageSize;
+  int? pages;
+  int? page;
+  List<GoodDetailItem> items;
+  SpecialOfferGoodsDtetaisItems({
+    required this.counts,
+    required this.pageSize,
+    required this.pages,
+    required this.page,
+    required this.items});
+  factory SpecialOfferGoodsDtetaisItems.fromJson(Map<String,dynamic> json){
+    return SpecialOfferGoodsDtetaisItems(
+      counts: (json['counts'] as num?)?.toInt(),
+      pageSize: (json['pageSize'] as num?)?.toInt(),
+      pages: (json['pages'] as num?)?.toInt(),
+      page: (json['page'] as num?)?.toInt(),
+      items: (json['items'] as List?)
+        ?.map((item) => GoodDetailItem.formJSON(item))
+        .toList() ?? [],
+    );
+  }
+}
+
 
   //  {
   //     "id": "1181622001",
