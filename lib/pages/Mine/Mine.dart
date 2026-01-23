@@ -40,11 +40,17 @@ class _MineViewState extends State<MineView> {
             child: Column(
               //让Column里所有子元素在水平方向上向左对齐 CrossAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children:  [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child:Text(
                   '立即登录',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
+                )
+                
               ],
             ),
           ),

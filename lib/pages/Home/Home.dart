@@ -177,7 +177,7 @@ bool _hasMore = true; //是否还有下一页
     await _getOneStopList();
     await _getRecommendList();
     //展示刷新成功消息组件
-    ToastUtilis.shouToast(context, "刷新成功");
+    ToastUtilis.showToast(context, "刷新成功");
     _padding = 0;
     setState(() {
       
