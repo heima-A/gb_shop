@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:gb_shop/api/login.dart';
 import 'package:gb_shop/utils/ToastUtilis.dart';
 
 
@@ -14,11 +16,17 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _codeController = TextEditingController(); // 密码控制器
   // 用户账号Widget
   Widget _buildPhoneTextField() {
+    //专门用于表单输入的文本字段组件，
+    //它在 TextField 的基础上增加了表单验证、保存等功能，通常与 Form 组件一起使用。
+    //TextField - 基础文本输入
+    // TextFormField - 表单专用文本输入
     return TextFormField(
+      // 表单验证
       validator: (value) {
         if(value == null || value.isEmpty) {
           return '请输入账号';
         }
+        //正则表达式验证账号是否为11位数字
         if(!RegExp(r"^1[3-9]\d{9}$").hasMatch(value)) {
           return '请输入正确的账号';
         }
@@ -27,10 +35,24 @@ class _LoginPageState extends State<LoginPage> {
       controller: _phoneController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: 20), // 内容内边距
+        //提示文本hintText
+        //作用
+        // 在输入框为空时显示的灰色提示文本
+        // 用户开始输入时自动消失
+        // 用于指导用户输入什么内容
         hintText: "请输入账号",
         fillColor: const Color.fromRGBO(243, 243, 243, 1),
-        filled: true,
+          //filled（填充背景）
+          // 作用
+          // 为输入框添加背景色
+          // 需要配合 fillColor 使用
+          // 通常用于创建有背景色的输入框
+        filled: true, //启用填充
+        //OutlineInputBorder 是 Flutter 
+        //中用于定义带轮廓的输入框边框的类，
+        //特别适合与 TextFormField 或 TextField 配合使用。
         border: OutlineInputBorder(
+           // 关键：无边框线
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(25),
         ),
@@ -65,7 +87,23 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+ _login()async{
+  //调用接口函数
+  try{
+   final res =  await loginAPI({
+    "account":_phoneController.text,
+    "password":_codeController.text
+      });
+      print(res);//用户信息
+      ToastUtilis.showToast(context,"登录成功");
+      Navigator.pop(context);
+  //走到这里此时一定登陆成功
+  }catch (e){
+      ToastUtilis.showToast(context, (e as DioException).message);
+  }
+ 
 
+ }
   // 登录按钮Widget
   Widget _buildLoginButton() {
     return SizedBox(
@@ -76,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
           // 登录逻辑
         if( _formKey.currentState!.validate()){
         if(_isChecked){
+          _login();
           }else{
               ToastUtilis.showToast(context,'请勾选同意隐私条款和用户协议');
           }
@@ -97,11 +136,14 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildCheckbox() {
     return Row(
       children: [
-        // 设置勾选为圆角
+        //Checkbox 是 Flutter 中用于多选的复选框组件。
         Checkbox(
           value: _isChecked,
+          //勾选后的颜色
           activeColor: Colors.black,
+          // 未勾选时的颜色
           checkColor: Colors.white,
+          //onChanged 是 Flutter 中处理用户交互变化的核心回调函数，广泛用于各种表单组件。
           onChanged: (bool? value) {
             setState(() {
               _isChecked = value ?? false;

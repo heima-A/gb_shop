@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ToastUtilis{
     static bool showLoading = false;
-    static void showToast(BuildContext content,String? msg){
+    static void showToast(BuildContext context,String? msg){
       if(ToastUtilis.showLoading){
         return;
       }
@@ -10,7 +10,7 @@ class ToastUtilis{
       Future.delayed(Duration(seconds: 3),(){
         ToastUtilis.showLoading = false;
       });
-       ScaffoldMessenger.of(content).showSnackBar(
+       ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         //设置圆角
         shape: RoundedRectangleBorder(
