@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gb_shop/api/login.dart';
+import 'package:gb_shop/stores/userController.dart';
 import 'package:gb_shop/utils/ToastUtilis.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneController = TextEditingController(); // 账号控制器
   TextEditingController _codeController = TextEditingController(); // 密码控制器
+  final UserController _userController = Get.find(); //寻找对象
   // 用户账号Widget
   Widget _buildPhoneTextField() {
     //专门用于表单输入的文本字段组件，
@@ -94,7 +98,9 @@ class _LoginPageState extends State<LoginPage> {
     "account":_phoneController.text,
     "password":_codeController.text
       });
-      print(res);//用户信息
+      // print(res);//用户信息
+      // 登录成功后，将用户信息保存到本地
+      _userController.updateUserInfo(res);
       ToastUtilis.showToast(context,"登录成功");
       Navigator.pop(context);
   //走到这里此时一定登陆成功
@@ -200,6 +206,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
+      //在 Flutter 中，Form 组件是一个非常重要的表单容器组件，用于管理一组表单字段的验证、提交和重置。
       body: Form(
         key: _formKey,
         child: Container(

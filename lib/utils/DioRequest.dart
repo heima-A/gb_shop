@@ -28,7 +28,10 @@ class Diorequest {
         
         onError: (error,handle) {
           // handle.reject(error);
-          handle.reject(DioException(requestOptions: error.requestOptions,
+          //handle.reject(...) 是“通知 Dio：这次请求失败了”
+          handle.reject(
+            //DioException(...) 是“重新包装异常”
+            DioException(requestOptions: error.requestOptions,
           message: error.response?.data["msg"] ?? ""));
         },
       ),

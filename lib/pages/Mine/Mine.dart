@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gb_shop/api/Mine.dart';
 import 'package:gb_shop/components/Home/GbMoreList.dart';
 import 'package:gb_shop/components/Home/Mine/index.dart';
+import 'package:gb_shop/stores/userController.dart';
 import 'package:gb_shop/viewmodels/home.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class MineView extends StatefulWidget {
   MineView({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class MineView extends StatefulWidget {
 }
 
 class _MineViewState extends State<MineView> {
+  final UserController _userController = Get.put(UserController());
   Widget _buildHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -25,31 +29,43 @@ class _MineViewState extends State<MineView> {
       padding: const EdgeInsets.only(left: 20, right: 40, top: 80, bottom: 20),
       child: Row(
         children: [
-           // 创建一个圆形头像组件CircleAvatar()
-          CircleAvatar(
+          Obx((){
+            return  CircleAvatar(
             radius: 26,// 圆的半径 = 26像素
-            backgroundImage: const AssetImage('lib/assets/goods_avatar.png'),// 显示项目中的本地图片
+            backgroundImage: 
+            _userController.user.value.avatar.isNotEmpty ?
+             NetworkImage(_userController.user.value.avatar) :
+             AssetImage('lib/assets/goods_avatar.png'),// 显示项目中的本地图片
             // 作用：
             // 1. 如果图片加载失败，显示白色背景
             // 2. 如果图片有透明部分，用白色填充
             // 3. 确保圆形效果明显
             backgroundColor: Colors.white,// 圆形背景色为白色
-          ),
+          );
+          }),
+           // 创建一个圆形头像组件CircleAvatar()
+         
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               //让Column里所有子元素在水平方向上向左对齐 CrossAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
-                GestureDetector(
+                Obx((){
+                  //Obx中必须得有可检测得响应式数
+                  return  GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/login');
+                    if(_userController.user.value.id.isEmpty){
+                        Navigator.pushNamed(context, '/login');
+                    }
                   },
                   child:Text(
-                  '立即登录',
+                    _userController.user.value.id.isEmpty ? '立即登录' : _userController.user.value.account,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-                )
+                );
+                })
+               
                 
               ],
             ),
