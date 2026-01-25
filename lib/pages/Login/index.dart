@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gb_shop/api/login.dart';
+import 'package:gb_shop/stores/TokenManager.dart';
 import 'package:gb_shop/stores/userController.dart';
 import 'package:gb_shop/utils/ToastUtilis.dart';
 import 'package:get/get.dart';
@@ -100,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       // print(res);//用户信息
       // 登录成功后，将用户信息保存到本地
+      await tokenManager.setToken(res.token);//写入持久化
       _userController.updateUserInfo(res);
       ToastUtilis.showToast(context,"登录成功");
       Navigator.pop(context);
