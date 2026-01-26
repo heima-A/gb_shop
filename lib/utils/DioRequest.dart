@@ -16,6 +16,7 @@ class Diorequest {
       _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (request,handle) {
           //注入token request headers Authorization = 'Bearer $token'
+          //如果 token 不为空，说明用户已经登录，可以在请求中携带 token
           if(tokenManager.getToken().isNotEmpty){
             request.headers = {
               'Authorization': 'Bearer ${tokenManager.getToken()}',
@@ -38,7 +39,10 @@ class Diorequest {
           //handle.reject(...) 是“通知 Dio：这次请求失败了”
           handle.reject(
             //DioException(...) 是“重新包装异常”
-            DioException(requestOptions: error.requestOptions,
+          DioException(
+            //当前失败请求的完整信息
+          requestOptions: error.requestOptions,
+          //这个 message 就是你在登录失败或接口失败时弹出 Toast 的内容
           message: error.response?.data["msg"] ?? ""));
         },
       ),

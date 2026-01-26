@@ -11,7 +11,11 @@ class ToastUtilis{
       Future.delayed(Duration(seconds: 3),(){
         ToastUtilis.showLoading = false;
       });
+      //作用：获取当前页面（context 所在的 Scaffold）对应的 ScaffoldMessenger
+      //它负责 在页面上显示 SnackBar 消息ScaffoldMessenger.of(context)
        ScaffoldMessenger.of(context).showSnackBar(
+        //页面底部弹出一个短暂提示条
+        //可以显示操作成功、错误信息、警告等
       SnackBar(
         //设置圆角
         shape: RoundedRectangleBorder(

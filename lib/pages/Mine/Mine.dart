@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gb_shop/api/Mine.dart';
 import 'package:gb_shop/components/Home/GbMoreList.dart';
 import 'package:gb_shop/components/Home/Mine/index.dart';
+import 'package:gb_shop/stores/TokenManager.dart';
 import 'package:gb_shop/stores/userController.dart';
 import 'package:gb_shop/viewmodels/home.dart';
+import 'package:gb_shop/viewmodels/login.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -16,6 +18,35 @@ class MineView extends StatefulWidget {
 
 class _MineViewState extends State<MineView> {
   final UserController _userController = Get.find();
+  Widget _getLogout(){
+    return _userController.user.value.id.isNotEmpty ? 
+    Expanded(
+      child: GestureDetector(
+      onTap: (){
+        showDialog(context: context, builder: (context){
+            return AlertDialog(
+              title: Text('提示'),
+              content: Text('确定退出登录吗？'),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.pop(context);
+                }, child: Text('取消')),
+                TextButton(onPressed: ()async{
+                  //清除Getx 删除token
+                  await tokenManager.removeToken();
+                  //Getx内存清理
+                  _userController.updateUserInfo(UserInfo.fromJSON({}));
+                  Navigator.pop(context);
+                }, child: Text('确定')),
+              ],
+            );
+        });
+      },
+      child: Text('退出登录',textAlign: TextAlign.end,),
+    )
+    )
+    : Text('');
+  }
   Widget _buildHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -70,6 +101,8 @@ class _MineViewState extends State<MineView> {
               ],
             ),
           ),
+        Obx(()=>_getLogout()),
+        
         ],
       ),
     );

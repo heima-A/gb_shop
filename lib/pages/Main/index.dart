@@ -71,6 +71,7 @@ class _MainPageState extends State<MainPage> {
   final UserController _userController = Get.put(UserController());
   _initUser() async{
     await tokenManager.init();// 初始化token
+    //如果本地 token 不为空（用户已经登录过），就向后端获取最新用户信息，然后更新全局用户状态，让 UI 自动刷新显示最新信息。
     if(tokenManager.getToken().isNotEmpty){
       //如果token有值就获取用户信息
      _userController.updateUserInfo(await getUserInfoAPI()); 

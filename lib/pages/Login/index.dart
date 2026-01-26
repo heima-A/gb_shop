@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_shop/api/login.dart';
 import 'package:gb_shop/stores/TokenManager.dart';
 import 'package:gb_shop/stores/userController.dart';
+import 'package:gb_shop/utils/LoadingDialog.dart';
 import 'package:gb_shop/utils/ToastUtilis.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -93,8 +94,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
  _login()async{
-  //调用接口函数
+  // 调用接口函数
   try{
+    LoadingDialog.show(context,message: '努力登陆中');
    final res =  await loginAPI({
     "account":_phoneController.text,
     "password":_codeController.text
@@ -102,11 +104,15 @@ class _LoginPageState extends State<LoginPage> {
       // print(res);//用户信息
       // 登录成功后，将用户信息保存到本地
       await tokenManager.setToken(res.token);//写入持久化
+      //登录成功后，更新本地用户信息
       _userController.updateUserInfo(res);
       ToastUtilis.showToast(context,"登录成功");
+      //返回上一页
+      LoadingDialog.hide(context);
       Navigator.pop(context);
   //走到这里此时一定登陆成功
   }catch (e){
+     LoadingDialog.hide(context);
       ToastUtilis.showToast(context, (e as DioException).message);
   }
  
